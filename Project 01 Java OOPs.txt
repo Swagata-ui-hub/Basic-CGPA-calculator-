@@ -1,0 +1,314 @@
+//without any help of ai
+
+import java.util.Scanner;
+
+public class User {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        Account p = new Account();
+        while (true) {
+            if (!p.getLogin()) {
+                System.out.println("1. Sign Up");
+                System.out.println("2. Log In");
+                System.out.println("3. Exit");
+                System.out.print("Enter your choice: ");
+    
+                int choice = sc.nextInt();
+                switch (choice) {
+                    case 1-> p.signUp();
+                    case 2-> p.logIn(); 
+                    case 3-> {
+                        System.out.println("Goodbye!");
+                        sc.close();
+                        return;
+                    }
+                    default-> System.out.println("Invalid choice, try again.");
+                }
+            } else {
+                System.out.println("\n1. Calculate CGPA with previous credits ");
+                System.out.println("2. Calculate CGPA with all courses ");
+                System.out.println("3. Log out");
+                System.out.println("4. Exit");
+                int choice = sc.nextInt();
+                switch (choice) {
+                    case 1-> p.credCGPA();
+                    case 2-> {
+                        System.out.print("Enter total number of semesters: ");
+                        int totalSem = sc.nextInt();
+                        System.out.print("Enter the starting semester: ");
+                        int start = sc.nextInt();
+                        double[] result = p.entireCGPA(start, totalSem);
+                        System.out.println("\nYour final CGPA is " + (result[0] / result[1]));
+                    }
+                    case 3-> {
+                        p.logOut();
+                    }
+                    case 4-> {
+                        System.out.println("Goodbye!");
+                        sc.close();
+                        return;
+                    }
+                    default-> System.out.println("Invalid choice, try again.");
+                }
+            }
+        }
+    }
+}
+
+class Account {
+    private String name, roll, email, dept, id, pass;
+    private boolean login, blocked;  
+    private static Scanner sc = new Scanner(System.in);
+    
+    public Account() {
+        System.out.println("Sign up/Log-in to your existing profile!");
+    }
+    
+    public Account(String s) {}
+    
+    void logOut() {
+        login = false;
+    }
+
+    void logIn() {
+        if (!blocked) {
+            System.out.println("______________________________");
+            System.out.println("Login portal: \n");
+            if(login) {
+                System.out.println("You're already logged in.");
+                return;
+            }
+            for (int i = 0; i < 10; i++) {
+                System.out.print("Enter your existing ID: ");
+                String id = sc.nextLine();
+                System.out.print("Enter password: ");
+                String pass = sc.nextLine();
+                if (this.id != null && this.pass != null && this.id.equals(id) && this.pass.equals(pass)) {
+                    System.out.println("Login successful!\n");
+                    login = true;
+                    showDashboard();
+                    return;
+                }
+                System.out.println("Wrong ID or password!\n\nDo you want to create a new account or exit?");
+                System.out.println("1. Yes\n2. No\n3. Exit");
+                int temp = sc.nextInt();
+                sc.nextLine();
+                if (temp == 1) {
+                    signUp();
+                    System.out.println("______________________________");
+                    return;
+                } else if (temp == 2)  {
+                    System.out.println((10 - (i + 1)) + " tries left.");
+                    continue;
+                } else if (temp == 3) {
+                    System.out.println("_____________________");
+                    System.exit(0);
+                }
+                
+            }
+        }
+        System.out.println("You are permanently blocked.");
+        blocked = true;
+        System.out.println("_____________________");
+    }
+
+    String check() {
+        while (true) {
+            String data = sc.nextLine().toUpperCase();
+            if (data == null || data.isBlank() || data.isEmpty()) {
+                System.out.print("Input is empty. Enter valid data: ");
+                continue;
+            }
+            return data;
+        }
+    }
+    
+    void signUp() {
+        if (!blocked) {
+            System.out.print("\nEnter your Name: ");
+            this.name = check();
+            System.out.print("Enter your student ID: ");
+            this.roll = check();
+            System.out.print("Enter your department: ");
+            this.dept = check();
+            this.email = checkEmailAddress();
+            System.out.print("\nCreate a new Account ID: ");
+            this.id = sc.nextLine();
+            checkPassword();
+            return;
+        } 
+        System.out.println("You are permanently blocked.");
+    }
+    
+    private void showDashboard() {
+        System.out.println("Name: " + this.name);
+        System.out.println("Student ID: " + this.roll);
+        System.out.println("Department: " + this.dept);
+        System.out.println("E-mail: " + this.email);
+    }
+    
+    private String checkEmailAddress() {
+        System.out.print("Enter your e-mail address(Must be from BRACU): ");
+        String email = sc.nextLine().toLowerCase();
+        String check = "";
+        int i = 0;
+        boolean hasChar = false;
+        for (; i < email.length(); i++) {
+            if(email.charAt(i) == '@') {
+                hasChar = true;
+                break;
+            }
+        }
+        for (int start = i + 1; start < email.length(); start++) {
+            check += email.charAt(start);
+        }
+        if (hasChar && check.equals("g.bracu.ac.bd")) return email;
+        else {
+            System.out.println("Invalid e-mail!");
+            checkEmailAddress();
+            return email;
+        }
+    }
+    
+    private void checkPassword() {
+        int i = 0;
+        System.out.println("\n-Create a password which must contain 8 or more characters and atleast one-");
+        System.out.println("Upprcase, lowercase, Special character and number\n");
+
+        for (; i < 10; i++) {
+            System.out.print("Create a password: ");
+            String pass1 = sc.nextLine();
+            System.out.print("Confirm password: ");
+            String pass2 = sc.nextLine();
+            if (pass1.equals(pass2)) {
+                if (fulfilled(pass1)) {
+                    this.pass = pass1;
+                    System.out.println("\nA new account is created! Login to your account to continue.");
+                    logIn();
+                    return;
+                }
+            } else {
+                System.out.println("Password doesn't matches. Try again! ");
+            }
+        }
+    }
+    
+    boolean fulfilled (String pass) {
+        boolean length = false;
+        boolean uppercase = false;
+        boolean lowercase = false;
+        boolean special = false;
+        boolean number = false;
+        
+        for (int i = 0; i < pass.length(); i++) {
+            char c = pass.charAt(i);
+            if (pass.length() >= 8) length = true;
+            if (c >= 65 && c <= 90) uppercase = true;
+            else if (c >= 97 && c <= 122) lowercase = true;
+            else if (c >= 48 && c<= 57) number = true;
+            else special = true;
+        }
+        if (!length || !uppercase || !lowercase || !number || !special) {
+             System.out.println("Password doesn't contains- ");  
+        }
+        if (!length) System.out.println("-Enough letters ");
+        if (!uppercase) System.out.println("-Uppercase letter. ");
+        if (!lowercase) System.out.println("-Lowercase letter.");
+        if (!number) System.out.println("-Numbers.");
+        if (!special) System.out.println("-Special character\n");
+        if (length && uppercase && lowercase && number && special) {
+             return true;
+        }
+        return false;
+    }
+    
+    public boolean getLogin() {
+        return this.login;
+    }
+    
+    public void credCGPA() {
+        System.out.print("Enter your previous CGPA: ");
+        double prevCgpa = cgpaCheck();
+        System.out.print("Enter your previous completed credit hours: ");
+        int prevCredit = creditCheck(0);
+        System.out.print("Credit completed this semester: ");
+        int credit = creditCheck(prevCredit);
+        System.out.print("Courses completed this semester: ");
+        double[] courseGpa = new double[courses()];
+        double gpa = 0;
+        System.out.println("Enter the GPA of " + courseGpa.length + " courses: ");
+        for (int i = 0; i < courseGpa.length; i++) {
+            System.out.print("Course " + (i + 1) + ": ");
+            courseGpa[i] = GPA();
+            gpa += courseGpa[i];
+        }
+        gpa /= courseGpa.length;
+        System.out.println("Your new CGPA is: " + (((prevCgpa * prevCredit) + (gpa * credit)) / (prevCredit + credit)) + "\n");
+    }
+
+    private double GPA() {
+        double gpa = sc.nextDouble();
+        sc.nextLine();
+        if (gpa <= 0) {
+            System.out.println("Invalid input! Try again.");
+            GPA();
+        }
+        return gpa;
+    }
+
+    
+    private int courses() {
+        int courses = sc.nextInt();
+        sc.nextLine();
+        if (courses <= 0) {
+            System.out.println("Invalid input! Try again.");
+            courses();
+        }
+        return courses;
+    }
+    
+    private double cgpaCheck() {
+        double cgpa = 0;
+        cgpa = sc.nextDouble();
+        sc.nextLine();
+        if (cgpa >= 0.0 && cgpa <= 4.00) return cgpa;
+        else if (cgpa < 0.0 || cgpa >= 4.0) {
+            System.out.println("Invalid CGPA! Enter valid CGPA;");
+            cgpaCheck();
+        }
+        return cgpa;
+    }
+    
+    private int creditCheck(int cre) {
+        int credit = 0;
+        credit = sc.nextInt();
+        sc.nextLine();
+        if (cre + credit >= 0 && cre + credit <= 300) return credit;
+        else if (cre + credit < 0 || cre + credit >= 300) {
+            System.out.print("Invalid credits! Enter valid credit:");
+            creditCheck(cre);
+        }
+        return credit;
+    }
+    
+    public double[] entireCGPA(int sem, int totalSem) {
+        if (sem > totalSem) {
+            return new double[] {0, 0};
+        }
+        System.out.print("Enter the number of courses in semester " + sem + ": ");
+        int courses = sc.nextInt();
+        double totalPoint = 0, totalCredit = 0;
+        for (int i = 1; i <= courses; i++) {
+            System.out.print("Grade point of course " + i + ": ");
+            double grade = cgpaCheck();
+            System.out.print("Credit hours of course  " + i + ": ");
+            double credit = creditCheck(0);
+            totalPoint += grade * credit;
+            totalCredit += credit;
+        }
+        double[] next = entireCGPA((sem + 1), totalSem);
+        totalPoint += next[0];
+        totalCredit += next[1];
+        return new double[]{totalPoint, totalCredit};
+    }
+}
