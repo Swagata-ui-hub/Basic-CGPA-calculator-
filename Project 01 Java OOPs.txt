@@ -281,8 +281,8 @@ class Account {
         int credit = 0;
         credit = sc.nextInt();
         sc.nextLine();
-        if (cre + credit >= 0 && cre + credit <= 300) return credit;
-        else if (cre + credit < 0 || cre + credit >= 300) {
+        if (cre + credit >= 0 && cre + credit <= 207) return credit;
+        else if (cre + credit < 0 || cre + credit >= 207) {
             System.out.print("Invalid credits! Enter valid credit:");
             creditCheck(cre);
         }
@@ -310,5 +310,6 @@ class Account {
         return new double[]{totalPoint, totalCredit};
     }
 }
+
 
 
