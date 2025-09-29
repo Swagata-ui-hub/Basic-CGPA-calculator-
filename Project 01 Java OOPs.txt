@@ -1,5 +1,3 @@
-//without any help of ai
-
 import java.util.Scanner;
 
 public class User {
@@ -312,4 +310,5 @@ class Account {
         return new double[]{totalPoint, totalCredit};
     }
 }
+
 
