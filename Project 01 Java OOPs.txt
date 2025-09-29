@@ -171,7 +171,7 @@ class Account {
     private void checkPassword() {
         int i = 0;
         System.out.println("\n-Create a password which must contain 8 or more characters and atleast one-");
-        System.out.println("Upprcase, lowercase, Special character and number\n");
+        System.out.println("Uppercase, lowercase, Special character and number\n");
 
         for (; i < 10; i++) {
             System.out.print("Create a password: ");
@@ -310,6 +310,7 @@ class Account {
         return new double[]{totalPoint, totalCredit};
     }
 }
+
 
 
 
