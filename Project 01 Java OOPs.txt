@@ -27,6 +27,8 @@ public class User {
                 System.out.println("2. Calculate CGPA from all courses ");
                 System.out.println("3. Log out");
                 System.out.println("4. Exit");
+                System.out.print("Enter your choice: ");
+
                 int choice = sc.nextInt();
                 switch (choice) {
                     case 1-> p.credCGPA();
@@ -229,10 +231,10 @@ class Account {
         double prevCgpa = cgpaCheck();
         System.out.print("Enter your previous completed credit hours: ");
         int prevCredit = creditCheck(0);
-        System.out.print("Credit completed this semester: ");
-        int credit = creditCheck(prevCredit);
         System.out.print("Courses completed this semester: ");
         double[] courseGpa = new double[courses()];
+        System.out.print("Credit completed this semester: ");
+        int credit = creditCheck(prevCredit);
         double gpa = 0;
         System.out.println("Enter the GPA of " + courseGpa.length + " courses: ");
         for (int i = 0; i < courseGpa.length; i++) {
@@ -310,6 +312,7 @@ class Account {
         return new double[]{totalPoint, totalCredit};
     }
 }
+
 
 
 
