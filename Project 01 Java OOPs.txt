@@ -38,7 +38,7 @@ public class User {
                         System.out.print("Enter the starting semester: ");
                         int start = sc.nextInt();
                         double[] result = p.entireCGPA(start, totalSem);
-                        System.out.println("\nYour final CGPA is " + (result[0] / result[1]));
+                        System.out.println("\nYour final CGPA is " + String.format("%.2f", result[0] / result[1]));
                     }
                     case 3-> {
                         p.logOut();
@@ -244,7 +244,7 @@ class Account {
             gpa += courseGpa[i];
         }
         gpa /= courseGpa.length;
-        System.out.println("Your new CGPA is: " + (((prevCgpa * prevCredit) + (gpa * credit)) / (prevCredit + credit)) + "\n");
+        System.out.println("Your new CGPA is: " + String.format("%.2f\n", (((prevCgpa * prevCredit) + (gpa * credit)) / (prevCredit + credit))));
     }
 
     private double GPA() {
@@ -252,7 +252,7 @@ class Account {
         sc.nextLine();
         if (gpa <= 0) {
             System.out.println("Invalid input! Try again.");
-            GPA();
+            return GPA();
         }
         return gpa;
     }
@@ -262,8 +262,8 @@ class Account {
         int courses = sc.nextInt();
         sc.nextLine();
         if (courses <= 0) {
-            System.out.println("Invalid input! Try again.");
-            courses();
+            System.out.print("Invalid input! Try again.");
+            return courses();
         }
         return courses;
     }
@@ -274,7 +274,7 @@ class Account {
         sc.nextLine();
         if (cgpa >= 0.0 && cgpa <= 4.00) return cgpa;
         else if (cgpa < 0.0 || cgpa >= 4.0) {
-            System.out.println("Invalid CGPA! Enter valid CGPA;");
+            System.out.print("Invalid CGPA! Enter valid Grade: ");
             cgpaCheck();
         }
         return cgpa;
@@ -300,9 +300,9 @@ class Account {
         int courses = sc.nextInt();
         double totalPoint = 0, totalCredit = 0;
         for (int i = 1; i <= courses; i++) {
-            System.out.print("Grade point of course " + i + ": ");
+            System.out.printf("%-25s: ", "Grade point of course " + i);
             double grade = cgpaCheck();
-            System.out.print("Credit hours of course  " + i + ": ");
+            System.out.printf("%-25s: ", "Credit hours of course " + i);
             double credit = creditCheck(0);
             totalPoint += grade * credit;
             totalCredit += credit;
@@ -313,6 +313,7 @@ class Account {
         return new double[]{totalPoint, totalCredit};
     }
 }
+
 
 
 
